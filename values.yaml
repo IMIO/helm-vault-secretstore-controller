@@ -1,0 +1,42 @@
+nameOverride: ""
+fullnameOverride: ""
+
+# This cluster's name, used as the Vault AppRole Role prefix
+# (auth/approle-externalsecrets/role/<clusterName>-<namespace>). Required,
+# and deliberately not defaulted from .Release.Name/.Release.Namespace: those
+# are user-controlled at install time, and cluster identity must not be.
+clusterName: ""
+
+# Vault server address, e.g. https://vault.imio.be. Required.
+vaultAddr: ""
+
+# Vault AppRole auth backend mount path. Empty uses the binary's own default
+# (auth/approle-externalsecrets).
+approleBackend: ""
+
+# How often the Controller sweeps Vault for AppRole Role changes. Empty uses
+# the binary's own default (1m).
+pollInterval: ""
+
+image:
+  repository: harbor.imio.be/infra/vault-secretstore-controller
+  tag: ""
+  pullPolicy: IfNotPresent
+
+imagePullSecrets:
+  - name: harbor-secret
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+# Kubernetes-auth login for the Controller's own Vault access lands in a
+# later ticket; until then it authenticates with a static VAULT_TOKEN read
+# from an existing Secret, provisioned out-of-band (never created by this
+# chart).
+vaultAuth:
+  tokenSecretName: ""
+  tokenSecretKey: "VAULT_TOKEN"
+
+resources: {}

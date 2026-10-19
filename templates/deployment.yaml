@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "vault-secretstore-controller.fullname" . }}
+  labels:
+    {{- include "vault-secretstore-controller.labels" . | nindent 4 }}
+spec:
+  # No leader election yet (single reconcile loop, see cmd/main.go) — more
+  # than one replica would run duplicate, conflicting reconciles.
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "vault-secretstore-controller.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "vault-secretstore-controller.labels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "vault-secretstore-controller.serviceAccountName" . }}
+      containers:
+        - name: vault-secretstore-controller
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          args:
+            - --cluster-name={{ required "clusterName is required (the Vault AppRole Role prefix) and must be set explicitly, never inferred" .Values.clusterName }}
+            - --vault-addr={{ required "vaultAddr is required" .Values.vaultAddr }}
+            {{- if .Values.approleBackend }}
+            - --approle-backend={{ .Values.approleBackend }}
+            {{- end }}
+            {{- if .Values.pollInterval }}
+            - --poll-interval={{ .Values.pollInterval }}
+            {{- end }}
+          {{- if .Values.vaultAuth.tokenSecretName }}
+          env:
+            - name: VAULT_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.vaultAuth.tokenSecretName }}
+                  key: {{ .Values.vaultAuth.tokenSecretKey }}
+          {{- end }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
