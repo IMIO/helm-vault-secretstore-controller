@@ -1,5 +1,10 @@
 # vault-secretstore-controller
 
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+![version](https://img.shields.io/github/tag/IMIO/helm-vault-secretstore-controller.svg?label=release)
+![test](https://github.com/IMIO/helm-vault-secretstore-controller/actions/workflows/test.yaml/badge.svg)
+![release](https://github.com/IMIO/helm-vault-secretstore-controller/actions/workflows/release.yaml/badge.svg)
+
 Helm chart for the per-cluster Vault SecretStore Controller (INFRA-6881).
 
 The Controller reconciles `external-secrets-approle` `Secret`/`SecretStore`
@@ -9,7 +14,32 @@ pairs from Vault AppRole Role state: it polls Vault for AppRole Roles under
 
 ## Installing
 
+### Pull Helm release
+
 ```sh
+helm repo add imio https://imio.github.io/helm-charts
+helm repo update
+```
+
+### Verify the chart signature
+
+Since release `3.0.1`, packaged charts are signed. See
+[IMIO/helm-charts — Verify chart signatures](https://github.com/IMIO/helm-charts#verify-chart-signatures)
+for how to verify.
+
+### Install the chart
+
+```sh
+helm install vault-secretstore-controller imio/vault-secretstore-controller \
+  --set clusterName=<cluster-name> \
+  --set vaultAddr=https://vault.imio.be
+```
+
+or by cloning this repository:
+
+```sh
+git clone https://github.com/imio/helm-vault-secretstore-controller.git
+cd helm-vault-secretstore-controller
 helm install vault-secretstore-controller . \
   --set clusterName=<cluster-name> \
   --set vaultAddr=https://vault.imio.be
@@ -69,3 +99,16 @@ helm install vault-secretstore-controller . \
   --set vaultAddr=https://vault.imio.be \
   --set vaultAuth.tokenSecretName=vault-token
 ```
+
+## Contributing
+
+Feel free to contribute by making a
+[pull request](https://github.com/imio/helm-vault-secretstore-controller/pull/new/main).
+
+Please read the official
+[Helm Contribution Guide](https://github.com/helm/charts/blob/master/CONTRIBUTING.md)
+from Helm for more information on how you can contribute to this Chart.
+
+## License
+
+[Apache License 2.0](/LICENSE)

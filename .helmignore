@@ -4,3 +4,12 @@
 .gitignore
 .helmignore
 *.tgz
+
+# CI
+.github/
+
+helmlint.sh
+.envrc
+flake.*
+nix/
+statix.toml
