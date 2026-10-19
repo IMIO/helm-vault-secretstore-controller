@@ -5,10 +5,14 @@ fullnameOverride: ""
 # (auth/approle-externalsecrets/role/<clusterName>-<namespace>). Required,
 # and deliberately not defaulted from .Release.Name/.Release.Namespace: those
 # are user-controlled at install time, and cluster identity must not be.
-clusterName: ""
+# The placeholder below only exists so the chart's own CI smoke-install
+# succeeds (the shared IMIO test action installs with this file verbatim,
+# no overrides) — always set this explicitly for a real deployment.
+clusterName: "ci-placeholder"
 
 # Vault server address, e.g. https://vault.imio.be. Required.
-vaultAddr: ""
+# Placeholder for CI smoke-install only — see clusterName above.
+vaultAddr: "https://vault.invalid"
 
 # Vault AppRole auth backend mount path. Empty uses the binary's own default
 # (auth/approle-externalsecrets).
