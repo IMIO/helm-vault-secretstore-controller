@@ -49,6 +49,16 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{/*
+ClusterRole/ClusterRoleBinding name. Cluster-scoped objects have no
+namespace field to disambiguate them, so the release namespace is folded
+into the name instead — unlike rbac-hobo.yaml's namespaced Role, which
+only needs a purpose suffix (e.g. "-hobo-exec").
+*/}}
+{{- define "vault-secretstore-controller.clusterRoleName" -}}
+{{- printf "%s-%s" (include "vault-secretstore-controller.fullname" .) .Release.Namespace | trunc 63 | trimSuffix "-" }}
+{{- end }}
+
+{{/*
 Service account name.
 */}}
 {{- define "vault-secretstore-controller.serviceAccountName" -}}

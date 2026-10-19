@@ -1,7 +1,7 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: {{ include "vault-secretstore-controller.fullname" . }}-{{ .Release.Namespace }}
+  name: {{ include "vault-secretstore-controller.clusterRoleName" . }}
   labels:
     {{- include "vault-secretstore-controller.labels" . | nindent 4 }}
 rules:
