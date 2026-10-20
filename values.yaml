@@ -43,4 +43,12 @@ vaultAuth:
   tokenSecretName: ""
   tokenSecretKey: "VAULT_TOKEN"
 
+# Escape hatches for things like mounting an internal CA bundle via an init
+# container (see https://docs.imio.be/interne/infraq/docs/vault/internal-ca.html).
+# Each is passed through to the pod/container spec verbatim.
+extraVolumes: []
+extraInitContainers: []
+extraVolumeMounts: []
+extraEnv: []
+
 resources: {}

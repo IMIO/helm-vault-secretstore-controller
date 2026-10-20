@@ -21,6 +21,14 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ include "vault-secretstore-controller.serviceAccountName" . }}
+      {{- with .Values.extraVolumes }}
+      volumes:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.extraInitContainers }}
+      initContainers:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       containers:
         - name: vault-secretstore-controller
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
@@ -34,13 +42,22 @@ spec:
             {{- if .Values.pollInterval }}
             - --poll-interval={{ .Values.pollInterval }}
             {{- end }}
-          {{- if .Values.vaultAuth.tokenSecretName }}
+          {{- if or .Values.vaultAuth.tokenSecretName .Values.extraEnv }}
           env:
+            {{- if .Values.vaultAuth.tokenSecretName }}
             - name: VAULT_TOKEN
               valueFrom:
                 secretKeyRef:
                   name: {{ .Values.vaultAuth.tokenSecretName }}
                   key: {{ .Values.vaultAuth.tokenSecretKey }}
+            {{- end }}
+            {{- with .Values.extraEnv }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+          {{- end }}
+          {{- with .Values.extraVolumeMounts }}
+          volumeMounts:
+            {{- toYaml . | nindent 12 }}
           {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}

@@ -2,7 +2,7 @@ apiVersion: v2
 name: vault-secretstore-controller
 description: Per-cluster Vault SecretStore operator (INFRA-6881) — reconciles external-secrets-approle Secret/SecretStore pairs from Vault AppRole Role state
 type: application
-version: 0.1.0
+version: 0.2.0
 appVersion: "0.1.0"
 maintainers:
   - name: IMIO

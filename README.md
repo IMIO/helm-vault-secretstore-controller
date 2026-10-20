@@ -65,6 +65,10 @@ helm install vault-secretstore-controller . \
 | `serviceAccount.annotations` | no | `{}` | Annotations on the created ServiceAccount. |
 | `vaultAuth.tokenSecretName` | no | — | Name of an existing static-token Secret. See [Vault authentication](#vault-authentication). |
 | `vaultAuth.tokenSecretKey` | no | `VAULT_TOKEN` | Key within that Secret. |
+| `extraVolumes` | no | `[]` | Extra pod volumes, e.g. for mounting an internal CA bundle. |
+| `extraInitContainers` | no | `[]` | Extra init containers, e.g. for fetching an internal CA bundle. |
+| `extraVolumeMounts` | no | `[]` | Extra volume mounts on the Controller container. |
+| `extraEnv` | no | `[]` | Extra environment variables on the Controller container, e.g. `VAULT_CACERT`. |
 | `resources` | no | `{}` | Pod resource requests/limits. |
 
 `clusterName` is used as the Vault AppRole Role prefix
